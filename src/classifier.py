@@ -122,6 +122,9 @@ def main(args):
                 accuracy = np.mean(np.equal(best_class_indices, labels))
                 print('Accuracy: %.3f' % accuracy)
 
+                for i in range(len(best_class_indices)):
+                    print ('Path: %s, Label: %s', paths[i], labels[i])
+
 
 def split_dataset(dataset, min_nrof_images_per_class, nrof_train_images_per_class):
     train_set = []
