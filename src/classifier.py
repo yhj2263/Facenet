@@ -34,6 +34,8 @@ import os
 import sys
 import math
 import pickle
+import json
+import time
 from sklearn.svm import SVC
 
 def main(args):
@@ -89,6 +91,13 @@ def main(args):
                 emb_array[start_index:end_index,:] = sess.run(embeddings, feed_dict=feed_dict)
 
             classifier_filename_exp = os.path.expanduser(args.classifier_filename)
+            classifier_index_exp = '/root/Facenet-Server/data/model/index.json'
+            classifier_name = ''
+            # Parse the file path string to get the classifier name
+            for i in range(len(classifier_filename_exp)-1 ,0, -1):
+                if classifier_filename_exp[i] == '/':
+                    classifier_name = classifier_filename_exp[i+1:]
+                    break
 
             if (args.mode=='TRAIN'):
                 # Train classifier
@@ -102,7 +111,13 @@ def main(args):
                 # Saving classifier model
                 with open(classifier_filename_exp, 'wb') as outfile:
                     pickle.dump((model, class_names), outfile)
+
+                # Create a json object with classifier name and time created
+                classifier_json = {'name': classifier_name, 'date': str(time.ctime())}
+                append_to_json(classifier_json, classifier_index_exp)
+
                 print('Saved classifier model to file "%s"' % classifier_filename_exp)
+                print('Wrote classifier information to file "%s"' % classifier_index_exp)
 
             elif (args.mode=='CLASSIFY'):
                 # Classify images
@@ -124,7 +139,7 @@ def main(args):
 
                 for i in range(len(best_class_indices)):
                     print ('Path: %s, Label: %s' % (paths[i], class_names[best_class_indices[i]]))
-
+                    result_json = {'path': paths[i], 'name: ' class_names[best_class_indices[i]]}
 
 def split_dataset(dataset, min_nrof_images_per_class, nrof_train_images_per_class):
     train_set = []
@@ -169,6 +184,18 @@ def parse_arguments(argv):
         help='Use this number of images from each class for training and the rest for testing', default=10)
 
     return parser.parse_args(argv)
+
+def append_to_json(_dict,path):
+  with open(path, 'a+') as f:
+      f.seek(0,2)              #Go to the end of file
+    if f.tell() == 0 :       #Check if file is empty
+      json.dump([_dict], f, indent=4, separators=(',', ': '))  #If empty, write an array
+    else :
+      f.seek(-1,2)
+      f.truncate()           #Remove the last character, open the array
+      f.write(',')         #Write the separator
+      json.dump(_dict, f, indent=4, separators=(',', ': '))     #Dump the dictionary
+      f.write(']')           #Close the array
 
 if __name__ == '__main__':
     main(parse_arguments(sys.argv[1:]))
