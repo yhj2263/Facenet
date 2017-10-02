@@ -187,18 +187,18 @@ def parse_arguments(argv):
 
 def append_to_json(_dict,path):
     with open(path, 'a+') as f:
-      # Go to the end of file
-      f.seek(0,2)
-    # Check if file is empty
-    if f.tell() == 0 :
-        # If empty, write an array
-        json.dump([_dict], f, indent=4, separators=(',', ': '))
-    else :
-        f.seek(-1,2)
-        f.truncate()           # Remove the last character, open the array
-        f.write(',')         # Write the separator
-        json.dump(_dict, f, indent=4, separators=(',', ': '))     # Dump the dictionary
-        f.write(']')           # Close the array
+        # Go to the end of file
+        f.seek(0,2)
+        # Check if file is empty
+        if f.tell() == 0 :
+            # If empty, write an array
+            json.dump([_dict], f, indent=4, separators=(',', ': '))
+        else :
+            f.seek(-1,2)
+            f.truncate()           # Remove the last character, open the array
+            f.write(',')         # Write the separator
+            json.dump(_dict, f, indent=4, separators=(',', ': '))     # Dump the dictionary
+            f.write(']')           # Close the array
 
 if __name__ == '__main__':
     main(parse_arguments(sys.argv[1:]))
