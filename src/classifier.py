@@ -91,7 +91,7 @@ def main(args):
                 emb_array[start_index:end_index,:] = sess.run(embeddings, feed_dict=feed_dict)
 
             classifier_filename_exp = os.path.expanduser(args.classifier_filename)
-            classifier_index_exp = '/root/Facenet-Server/data/model/index.json'
+            classifier_index_exp = '/root/Facenet-Server/data/classifier/index.json'
             # classifier_name = ''
             # Parse the file path string to get the classifier name
             for i in range(len(classifier_filename_exp)-1 ,0, -1):
@@ -139,7 +139,8 @@ def main(args):
 
                 for i in range(len(best_class_indices)):
                     print ('Path: %s, Label: %s' % (paths[i], class_names[best_class_indices[i]]))
-                    # result_json = {'path': paths[i], 'name': class_names[best_class_indices[i]]}
+                    result_json = {'path': paths[i], 'name': class_names[best_class_indices[i]]}
+                    append_to_json(result_json, '/root/Facenet-Server/data/result.json')
 
 def split_dataset(dataset, min_nrof_images_per_class, nrof_train_images_per_class):
     train_set = []
