@@ -139,7 +139,7 @@ def main(args):
 
                 for i in range(len(best_class_indices)):
                     print ('Path: %s, Label: %s' % (paths[i], class_names[best_class_indices[i]]))
-                    result_json = {'path': paths[i], 'name: ' class_names[best_class_indices[i]]}
+                    result_json = {'path': paths[i], 'name': class_names[best_class_indices[i]]}
 
 def split_dataset(dataset, min_nrof_images_per_class, nrof_train_images_per_class):
     train_set = []
