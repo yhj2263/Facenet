@@ -91,7 +91,7 @@ def main(args):
                 emb_array[start_index:end_index,:] = sess.run(embeddings, feed_dict=feed_dict)
 
             classifier_filename_exp = os.path.expanduser(args.classifier_filename)
-            # classifier_index_exp = '/root/Facenet-Server/data/model/index.json'
+            classifier_index_exp = '/root/Facenet-Server/data/model/index.json'
             # classifier_name = ''
             # Parse the file path string to get the classifier name
             for i in range(len(classifier_filename_exp)-1 ,0, -1):
