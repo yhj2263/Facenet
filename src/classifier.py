@@ -186,16 +186,19 @@ def parse_arguments(argv):
     return parser.parse_args(argv)
 
 def append_to_json(_dict,path):
-  with open(path, 'a+') as f:
-      f.seek(0,2)              # Go to the end of file
-    if f.tell() == 0 :       # Check if file is empty
-      json.dump([_dict], f, indent=4, separators=(',', ': '))  #If empty, write an array
+    with open(path, 'a+') as f:
+      # Go to the end of file
+      f.seek(0,2)
+    # Check if file is empty
+    if f.tell() == 0 :
+        # If empty, write an array
+        json.dump([_dict], f, indent=4, separators=(',', ': '))
     else :
-      f.seek(-1,2)
-      f.truncate()           # Remove the last character, open the array
-      f.write(',')         # Write the separator
-      json.dump(_dict, f, indent=4, separators=(',', ': '))     # Dump the dictionary
-      f.write(']')           # Close the array
+        f.seek(-1,2)
+        f.truncate()           # Remove the last character, open the array
+        f.write(',')         # Write the separator
+        json.dump(_dict, f, indent=4, separators=(',', ': '))     # Dump the dictionary
+        f.write(']')           # Close the array
 
 if __name__ == '__main__':
     main(parse_arguments(sys.argv[1:]))
