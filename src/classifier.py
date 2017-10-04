@@ -92,12 +92,9 @@ def main(args):
 
             classifier_filename_exp = os.path.expanduser(args.classifier_filename)
             classifier_index_exp = '/root/Facenet-Server/data/classifier/index.json'
-            # classifier_name = ''
-            # Parse the file path string to get the classifier name
-            for i in range(len(classifier_filename_exp)-1 ,0, -1):
-                if classifier_filename_exp[i] == '/':
-                    classifier_name = classifier_filename_exp[i+1:]
-                    break
+            classifier_name = parse_filename(classifier_filename_exp)
+
+
 
             if (args.mode=='TRAIN'):
                 # Train classifier
@@ -139,7 +136,8 @@ def main(args):
 
                 for i in range(len(best_class_indices)):
                     print ('Path: %s, Label: %s' % (paths[i], class_names[best_class_indices[i]]))
-                    result_json = {'path': paths[i], 'name': class_names[best_class_indices[i]]}
+                    image_name = parse_filename(paths[i])
+                    result_json = {'filename': image_name, 'path': paths[i], 'name': class_names[best_class_indices[i]]}
                     append_to_json(result_json, '/root/Facenet-Server/data/result.json')
 
 def split_dataset(dataset, min_nrof_images_per_class, nrof_train_images_per_class):
@@ -200,6 +198,14 @@ def append_to_json(_dict,path):
             f.write(',')         # Write the separator
             json.dump(_dict, f, indent=4, separators=(',', ': '))     # Dump the dictionary
             f.write(']')           # Close the array
+
+def parse_filename(filepath):
+    # Parse the file path string to get the classifier name
+    for i in range(len(filepath)-1 ,0, -1):
+        if filepath[i] == '/':
+            filename = filepath[i+1:]
+            return filename
+
 
 if __name__ == '__main__':
     main(parse_arguments(sys.argv[1:]))
