@@ -137,7 +137,7 @@ def main(args):
                 for i in range(len(best_class_indices)):
                     print ('Path: %s, Label: %s' % (paths[i], class_names[best_class_indices[i]]))
                     image_name = parse_filename(paths[i])
-                    result_json = {'filename': image_name, 'path': paths[i], 'name': class_names[best_class_indices[i]], 'label': labels[i]}
+                    result_json = {'filename': image_name, 'path': get_public_path(paths[i]), 'name': class_names[best_class_indices[i]]}
                     append_to_json(result_json, '/root/Facenet-Server/data/result.json')
 
 def split_dataset(dataset, min_nrof_images_per_class, nrof_train_images_per_class):
@@ -206,6 +206,14 @@ def parse_filename(filepath):
             filename = filepath[i+1:]
             return filename
 
+def get_public_path(filepath):
+    count = 0
+    for i in range(len(filepath)-1 ,0, -1):
+        if filepath[i] == '/':
+            count = count + 1
+            if count == 2:
+                public_path = 'http://localhost:8081' + filepath[i:]
+                return public_path
 
 if __name__ == '__main__':
     main(parse_arguments(sys.argv[1:]))
