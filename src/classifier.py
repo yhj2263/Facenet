@@ -213,7 +213,7 @@ def get_public_path(filepath):
             count = count + 1
             if count == 2:
                 #public_path = 'http://localhost:8081' + filepath[i:]
-                public_path = 'http://http://54.237.168.141:8081' + filepath[i:]
+                public_path = 'http://54.237.168.141:8081' + filepath[i:]
                 return public_path
 
 if __name__ == '__main__':
